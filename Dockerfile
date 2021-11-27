@@ -7,10 +7,11 @@ ARG OSS_ACCESS_KEY_ID
 ARG OSS_ACCESS_KEY_SECRET
 
 ENV LC_ALL=C.UTF-8 \
-    LANG=C.UTF-8 \
-    OSS_ACCESS_KEY_ID=$OSS_ACCESS_KEY_ID \
-    OSS_ACCESS_KEY_SECRET=$OSS_ACCESS_KEY_SECRET \
-    OSS_ENDPOINT=$OSS_ENDPOINT
+    LANG=C.UTF-8
+
+#ENV OSS_ACCESS_KEY_ID=$OSS_ACCESS_KEY_ID \
+#    OSS_ACCESS_KEY_SECRET=$OSS_ACCESS_KEY_SECRET \
+#    OSS_ENDPOINT=$OSS_ENDPOINT
 
 # install requirements
 RUN pip install "dvc[oss]"   # since oss is the remote storage
@@ -21,7 +22,9 @@ RUN dvc init --no-scm
 
 # configuring remote server in dvc
 RUN dvc remote add -d model-store oss://models-dvc/trained_models
-
+RUN dvc remote modify model-store oss_endpoint $OSS_ENDPOINT
+RUN dvc remote modify --local model-store oss_key_id $OSS_ACCESS_KEY_ID
+RUN dvc remote modify --local model-store oss_key_secret $OSS_ACCESS_KEY_SECRET
 RUN cat .dvc/config
 
 # pulling the trained model
