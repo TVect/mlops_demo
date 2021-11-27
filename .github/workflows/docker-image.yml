@@ -13,6 +13,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag mlops_demo_inference:$(date +%s)
+      - name: Basic Information
+        run: |
+          echo "🎬 The job was automatically triggered by a ${{ github.event_name }} event."
+          echo "💻 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+          echo "🎋 Workflow is running on the branch ${{ github.ref }}"
+      - name: Checking out the repository
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+      - name: Configure OSS Credentials
+        uses: manyuanrong/setup-ossutil@v2.0
+        with:
+          endpoint: ${{ secrets.OSS_ENDPOINT }}
+          access-key-id: ${{ secrets.OSS_ACCESS_KEY_ID }}
+          access-key-secret: ${{ secrets.OSS_ACCESS_KEY_SECRET }}
+      - name: Build the Docker image
+        run: |
+          docker build --build-arg OSS_ACCESS_KEY_ID=${{ secrets.OSS_ACCESS_KEY_ID }} \
+                       --build-arg OSS_ACCESS_KEY_SECRET=${{ secrets.OSS_ACCESS_KEY_SECRET }} \
+                       --build-arg OSS_ENDPOINT=${{ secrets.OSS_ENDPOINT }} \
+                       --tag mlops_demo_inference:latest .
+      - name: Push to Ali Docker Repository
+        run: |
+          docker login -u ${{ secrets.ALI_ACR_USERNAME }} -p ${{ secrets.ALI_ACR_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
+          docker tag mlops_demo_inference:latest registry.cn-hangzhou.aliyuncs.com/mlops_demo/mlops_demo_inference:latest
+          docker push registry.cn-hangzhou.aliyuncs.com/mlops_demo/mlops_demo_inference:latest
