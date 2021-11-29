@@ -2,20 +2,22 @@ import numpy as np
 import onnxruntime as ort
 from scipy.special import softmax
 
-from data import DataModule
 from utils import timing
+from transformers import AutoTokenizer
 
 
 class ColaONNXPredictor:
     def __init__(self, model_path):
         self.ort_session = ort.InferenceSession(model_path)
-        self.processor = DataModule()
+        self.tokenizer = AutoTokenizer.from_pretrained("google/bert_uncased_L-2_H-128_A-2")
         self.lables = ["unacceptable", "acceptable"]
 
     @timing
     def predict(self, text):
-        inference_sample = {"sentence": text}
-        processed = self.processor.tokenize_data(inference_sample)
+        processed = self.tokenizer(text,
+                                   truncation=True,
+                                   padding="max_length",
+                                   max_length=128)
 
         ort_inputs = {
             "input_ids": np.expand_dims(processed["input_ids"], axis=0),

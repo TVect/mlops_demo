@@ -1,4 +1,4 @@
-FROM huggingface/transformers-pytorch-cpu:latest
+FROM python:3.7-slim
 
 COPY ./ /app
 WORKDIR /app
@@ -15,8 +15,8 @@ ENV LC_ALL=C.UTF-8 \
 #    OSS_ENDPOINT=$OSS_ENDPOINT
 
 # install requirements
+RUN pip install onnxruntime fastapi uvicorn numpy scipy transformers==4.5.1
 RUN pip install "dvc[oss]"   # since oss is the remote storage
-RUN pip install -r requirements_inference.txt
 
 # initialise dvc
 RUN dvc init --no-scm
