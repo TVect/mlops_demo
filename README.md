@@ -104,3 +104,19 @@ conda install ipykernel
 python -m ipykernel install --user --name project-setup
 pip install ipywidgets
 ```
+
+---
+
+## 工具使用指南
+
+### wandb
+
+https://docs.wandb.ai/quickstart
+
+### dvc + oss
+
+https://dvc.org/doc/command-reference/remote/add
+
+### github actions
+
+https://docs.github.com/cn/actions/quickstart
