@@ -120,3 +120,15 @@ https://dvc.org/doc/command-reference/remote/add
 ### github actions
 
 https://docs.github.com/cn/actions/quickstart
+
+### aliyun 函数计算 + aliyun ACR
+
+- 函数计算
+
+https://help.aliyun.com/product/50980.html
+
+这里的测试地址为：https://1008066561016311.cn-hangzhou.fc.aliyuncs.com/2016-08-15/proxy/mlops.LATEST/mlops_demo_inference/
+
+- 容器镜像服务 ACR
+
+https://help.aliyun.com/product/60716.html
