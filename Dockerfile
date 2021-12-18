@@ -13,8 +13,8 @@ ENV LC_ALL=C.UTF-8 \
     LANG=C.UTF-8
 
 # install requirements
+RUN pip install "dvc[s3]"==2.8.3   # since s3 is the remote storage
 RUN pip install onnxruntime fastapi uvicorn numpy scipy transformers==4.5.1
-RUN pip install "dvc[s3]"   # since s3 is the remote storage
 
 # initialise dvc
 RUN dvc init --no-scm
