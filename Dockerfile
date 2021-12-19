@@ -9,7 +9,7 @@ ARG AWS_SECRET_ACCESS_KEY
 ENV AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
     AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
 
-ENV TRANSFORMERS_CACHE=$MODEL_DIR \
+ENV TRANSFORMERS_CACHE=./models \
     TRANSFORMERS_VERBOSITY=error
 
 ENV LC_ALL=C.UTF-8 \
@@ -33,5 +33,5 @@ RUN dvc remote add -d model-store s3://chin-models-dvc/trained_models/
 RUN dvc pull dvcfiles/trained_model.dvc
 
 RUN python lambda_handler.py
-RUN chmod -R 0755 $MODEL_DIR
+RUN chmod -R 0755 ./models
 CMD [ "lambda_handler.lambda_handler"]
